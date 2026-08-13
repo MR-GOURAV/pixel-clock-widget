@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pixel Pink Clock</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+  :root{
+    --bg1: #ffd6e8;
+    --bg2: #ffb6d9;
+    --panel: #fff0f6;
+    --deep: #d6558f;
+    --deeper: #b23d72;
+    --accent: #ff9ecb;
+    --heart: #ff6fa5;
+    --cream: #fff8fb;
+    --shadow: #7a3357;
+  }
+
+  *{ box-sizing:border-box; image-rendering: pixelated; }
+
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+    font-family: 'VT323', monospace;
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .stage{
+    position:relative;
+    width: 340px;
+    height: 220px;
+  }
+
+  /* pixel clouds */
+  .cloud{
+    position:absolute;
+    background: var(--cream);
+    box-shadow:
+      8px 0 0 var(--cream), -8px 0 0 var(--cream),
+      0 -8px 0 var(--cream), 16px -8px 0 var(--cream), -16px -8px 0 var(--cream);
+    width:16px; height:16px;
+    opacity:0.8;
+  }
+  .cloud1{ top:6px; left:14px; transform: scale(0.9); animation: drift 9s ease-in-out infinite; }
+  .cloud2{ top:20px; right:10px; transform: scale(0.7); animation: drift 11s ease-in-out infinite reverse; }
+
+  @keyframes drift{
+    0%,100%{ transform: translateX(0) scale(0.9); }
+    50%{ transform: translateX(10px) scale(0.9); }
+  }
+
+  /* floating hearts */
+  .heart{
+    position:absolute;
+    width:8px; height:8px;
+    background: var(--heart);
+    box-shadow:
+      -4px -4px 0 var(--heart), 4px -4px 0 var(--heart),
+      -8px 0 0 var(--heart), 8px 0 0 var(--heart), 0 4px 0 var(--heart),
+      -4px 4px 0 0 transparent;
+    opacity:0;
+    animation: floatUp 4s ease-in infinite;
+  }
+  .h1{ left:30px; bottom:40px; animation-delay:0s; }
+  .h2{ left:270px; bottom:60px; animation-delay:1.4s; }
+  .h3{ left:150px; bottom:20px; animation-delay:2.6s; }
+
+  @keyframes floatUp{
+    0%{ opacity:0; transform: translateY(0) scale(0.6); }
+    15%{ opacity:0.9; }
+    80%{ opacity:0.5; }
+    100%{ opacity:0; transform: translateY(-60px) scale(1); }
+  }
+
+  /* main panel */
+  .panel{
+    position:absolute;
+    left:50%; top:50%;
+    transform: translate(-50%,-50%);
+    width: 280px;
+    padding: 18px 14px 16px;
+    background: var(--panel);
+    border: 4px solid var(--deep);
+    box-shadow:
+      0 0 0 4px var(--cream) inset,
+      6px 6px 0 var(--shadow);
+    text-align:center;
+  }
+
+  .panel::before{
+    content:"";
+    position:absolute;
+    top:-10px; left:-10px;
+    width:10px; height:10px;
+    background: var(--deep);
+  }
+  .panel::after{
+    content:"";
+    position:absolute;
+    bottom:-10px; right:-10px;
+    width:10px; height:10px;
+    background: var(--deep);
+  }
+
+  .title{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color: var(--deeper);
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+
+  .critter{
+    width:48px; height:32px;
+    margin: 0 auto 10px;
+    position:relative;
+  }
+  /* pixel cat face made from box-shadow "pixels" */
+  .pix{
+    position:absolute;
+    width:4px; height:4px;
+  }
+
+  .time{
+    font-family:'Press Start 2P', monospace;
+    font-size: 30px;
+    color: var(--deeper);
+    letter-spacing:2px;
+    text-shadow: 2px 2px 0 var(--accent);
+    margin: 6px 0 8px;
+  }
+
+  .date{
+    font-family:'VT323', monospace;
+    font-size: 20px;
+    color: var(--deep);
+    letter-spacing:1px;
+  }
+
+  .day{
+    font-family:'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--cream);
+    background: var(--deep);
+    display:inline-block;
+    padding:4px 8px;
+    margin-top:10px;
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+
+  .blink{
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{
+    0%,49%{ opacity:1; }
+    50%,100%{ opacity:0.3; }
+  }
+
+  .footer-dots{
+    margin-top:12px;
+    display:flex; justify-content:center; gap:6px;
+  }
+  .footer-dots span{
+    width:6px; height:6px; background: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="heart h1"></div>
+  <div class="heart h2"></div>
+  <div class="heart h3"></div>
+
+  <div class="panel">
+    <div class="title">✧ TODAY ✧</div>
+
+    <svg class="critter" viewBox="0 0 12 8" shape-rendering="crispEdges">
+      <!-- pixel cat, 12x8 grid, each cell = 4px via viewBox scale -->
+      <g fill="#ffb6d9">
+        <rect x="1" y="0" width="1" height="1"/>
+        <rect x="10" y="0" width="1" height="1"/>
+      </g>
+      <g fill="#d6558f">
+        <rect x="2" y="1" width="8" height="5"/>
+        <rect x="1" y="2" width="1" height="4"/>
+        <rect x="10" y="2" width="1" height="4"/>
+      </g>
+      <g fill="#fff0f6">
+        <rect x="3" y="2" width="6" height="4"/>
+      </g>
+      <g fill="#7a3357">
+        <rect x="4" y="3" width="1" height="1"/>
+        <rect x="7" y="3" width="1" height="1"/>
+      </g>
+      <g fill="#ff9ecb">
+        <rect x="5" y="4" width="2" height="1"/>
+      </g>
+    </svg>
+
+    <div class="time" id="clock">00:00:00</div>
+    <div class="date" id="datestr">Loading...</div>
+    <div class="day" id="dayname">DAY</div>
+
+    <div class="footer-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function pad(n){ return n.toString().padStart(2,'0'); }
+
+  function update(){
+    const now = new Date();
+    const h = pad(now.getHours());
+    const m = pad(now.getMinutes());
+    const s = pad(now.getSeconds());
+    document.getElementById('clock').innerHTML =
+      h + '<span class="blink">:</span>' + m + '<span class="blink">:</span>' + s;
+
+    const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+    const days = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+
+    document.getElementById('datestr').textContent =
+      pad(now.getDate()) + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    document.getElementById('dayname').textContent = days[now.getDay()];
+  }
+
+  update();
+  setInterval(update, 1000);
+</script>
+
+</body>
+</html>
